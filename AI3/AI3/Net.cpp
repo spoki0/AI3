@@ -9,9 +9,7 @@ void Net::getResults(vector<double> &resultVals) const {
 
 	for (unsigned n = 0; n < m_layers.back().size() -1; ++n){
 		resultVals.push_back(m_layers.back()[n].getOutputVal() );
-
 	}
-
 }
 
 
@@ -25,7 +23,6 @@ void Net::backProp(const vector<double> &targetVals){
 
 		double delta = targetVals[n] - outputLayer[n].getOutputVal();
 		m_error += delta*delta;
-
 	}
 	
 	m_error /= outputLayer.size() -1;
@@ -35,7 +32,6 @@ void Net::backProp(const vector<double> &targetVals){
 		(m_recentAverageError * m_recentAverageSmoothingFactor + m_error)
 		/ (m_recentAverageSmoothingFactor + 1.0);
 
-	
 	// output layer gradients
 
 	for(unsigned n = 0; n < outputLayer.size() -1; ++n){
@@ -65,12 +61,8 @@ void Net::backProp(const vector<double> &targetVals){
 		for (unsigned n = 0; n < layer.size() -1; ++n){
 
 			layer[n].updateInputWeights(prevLayer);
-
 		}
-
-
 	}
-
 }
 
 
@@ -92,7 +84,6 @@ void Net::feedForward(const vector<double> &inputVals){
 		for (unsigned n = 0; n < m_layers[layerNum].size() -1; ++n){
 			m_layers[layerNum][n].feedForward( prevLayer );
 		}
-
 	}
 }
 
@@ -114,10 +105,8 @@ Net::Net(const vector<unsigned> &topology){
 		m_layers.back().back().setOutputVal(1.0);
 
 	}
-
 }
 
 
-Net::~Net(void)
-{
+Net::~Net(void) {
 }
