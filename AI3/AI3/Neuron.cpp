@@ -86,16 +86,14 @@ void Neuron::feedForward(const Layer &prevLayer){
 
 Neuron::Neuron(unsigned numOutputs, unsigned myIndex){
 
-
-
 	for (unsigned c = 0; c < numOutputs; ++c){
 		m_outputWeights.push_back( Connection() );
 		m_outputWeights.back().weight = randomWeight();
 	}
 
 	m_myIndex = myIndex;
-
-
+	eta = 0.15;
+	alpha = 0.5;
 }
 
 Neuron::~Neuron(void)

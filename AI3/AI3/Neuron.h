@@ -22,8 +22,8 @@ public:
 	void updateInputWeights(Layer &prevLayer);
 private:
 	
-	static double eta;		// [0-1] overall net training rate
-	static double alpha;	// [0-n] multiplier of last change
+	double eta;		// [0-1] overall net training rate
+	double alpha;	// [0-n] multiplier of last change
 	static double transferFunction(double x);
 	static double transferFunctionDerivative(double x);
 	static double randomWeight(void) {return rand() / double(RAND_MAX); }
