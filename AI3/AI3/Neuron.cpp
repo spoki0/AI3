@@ -2,8 +2,6 @@
 //#include "Neuron.h"
 
 using namespace std;
-
-
 void Neuron::updateInputWeights(Layer &prevLayer){
 
 	// update connections in previous layer
@@ -24,11 +22,8 @@ void Neuron::updateInputWeights(Layer &prevLayer){
 
 		neuron.m_outputWeights[m_myIndex].deltaWeight = newDeltaWeight;
 		neuron.m_outputWeights[m_myIndex].weight += newDeltaWeight;
-
 	}
-
 }
-
 
 double Neuron::sumDOW(const Layer &nextLayer) const{
 
@@ -40,8 +35,6 @@ double Neuron::sumDOW(const Layer &nextLayer) const{
 	return sum;
 }
 
-
-
 void Neuron::calcHiddenGradients( const Layer &nextLayer){
 
 	double dow = sumDOW(nextLayer);
@@ -49,14 +42,12 @@ void Neuron::calcHiddenGradients( const Layer &nextLayer){
 
 }
 
-
 void Neuron::calcOutputGradients (double targetVal){
 
 	double delta = targetVal - m_outputVal;
 	m_gradient = delta * Neuron::transferFunctionDerivative(m_outputVal);
 
 }
-
 
 double Neuron::transferFunction(double x){
 
@@ -69,8 +60,6 @@ double Neuron::transferFunctionDerivative(double x){
 	//tanh derivative
 	return 1.0 - x*x;
 }
-
-
 
 void Neuron::feedForward(const Layer &prevLayer){
 
