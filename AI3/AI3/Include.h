@@ -1,9 +1,15 @@
+
 #pragma once
+
+//STD
 #include <vector>
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
 #include <cmath>
-//#include "Net.h"
-//#include "Neuron.h"
+
+//Project
+#include "Neuron.h"
+#include "Net.h"
+
 

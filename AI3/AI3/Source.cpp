@@ -1,7 +1,7 @@
 // Neural net :D
 
 #include "Include.h"
-#include "Net.h"
+// #include "Net.h"
 
 using namespace std;
 

@@ -1,6 +1,8 @@
 #pragma once
+
 #include "Include.h"
-#include "Neuron.h"
+//#include "Neuron.h"
+
 class Net
 {
 public:
