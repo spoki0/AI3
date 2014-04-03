@@ -37,14 +37,16 @@ using namespace std;
 
 int main( int argc, char** argv )
 {
-    if( argc != 2)
+    /*if( argc != 2)
     {
      cout <<" Usage: display_image ImageToLoadAndDisplay" << endl;
      return -1;
-    }
+    }*/
 
-    Mat image;
+    Mat image, bwimg;
     image = imread("A1.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
+	bwimg = imread("A1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+
 
     if(! image.data )                              // Check for invalid input
     {
@@ -53,9 +55,15 @@ int main( int argc, char** argv )
         return -1;
     }
 
+	int TotalNumberOfPixels = bwimg.rows * bwimg.cols;
+	int ZeroPixels = TotalNumberOfPixels - countNonZero(bwimg);
+	cout << "The number of pixels that are zero is " << ZeroPixels << endl;
+
+
+
     namedWindow( "Display window", WINDOW_AUTOSIZE );// Create a window for display.
     imshow( "Display window", image );                   // Show our image inside it.
-	cin.get();
+
 
     waitKey();                                          // Wait for a keystroke in the window
     return 0;
