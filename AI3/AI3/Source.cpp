@@ -27,7 +27,7 @@ int main(){
 */
 
 
-
+#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
@@ -35,40 +35,54 @@ int main(){
 using namespace cv;
 using namespace std;
 
+const int alphabetSize = 3;
+const int ImageSize = 30;
+const int trainingSet = 10;
+
 int main( int argc, char** argv )
 {
+	char letters[alphabetSize] = { 'A', 'B', 'C'};
+	int NumberEachRow[ImageSize];
+	Mat img, ImgRow;
+
     /*if( argc != 2)
     {
      cout <<" Usage: display_image ImageToLoadAndDisplay" << endl;
      return -1;
     }*/
+	
+	for (int i = 0; i <= alphabetSize; i++){
+		for (int samples = 1; samples <= trainingSet; samples++){
+			string imgPath;
+			stringstream PathPrep;
+			PathPrep << letters[i] << samples << ".jpg";
+			imgPath = PathPrep.str();
 
-    Mat image, bwimg;
-    image = imread("A1.jpg", CV_LOAD_IMAGE_COLOR);   // Read the file
-	bwimg = imread("A1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+			cout << imgPath;
+			cin.get();
+			img = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);	// Read the file
 
+			if (!img.data)										// Check for invalid input
+			{
+				cout << "Could not open or find the image" << std::endl;
+				cin.get();
+				return -1;
+			}
 
-    if(! image.data )                              // Check for invalid input
-    {
-        cout <<  "Could not open or find the image" << std::endl ;
-		cin.get();
-        return -1;
-    }
+			for (int i = 0; i < img.rows; i++)
+			{
+				ImgRow = img.row(i);
+				NumberEachRow[i] = countNonZero(ImgRow);
+			}
+		}
+	}
+	
+    namedWindow( "Display window", WINDOW_AUTOSIZE );	// Create a window for display.
+    imshow( "Display window", img );					// Show our image inside it.
 
-	int TotalNumberOfPixels = bwimg.rows * bwimg.cols;
-	int ZeroPixels = TotalNumberOfPixels - countNonZero(bwimg);
-	cout << "The number of pixels that are zero is " << ZeroPixels << endl;
-
-
-
-    namedWindow( "Display window", WINDOW_AUTOSIZE );// Create a window for display.
-    imshow( "Display window", image );                   // Show our image inside it.
-
-
-    waitKey();                                          // Wait for a keystroke in the window
+	waitKey();                                          // Wait for a keystroke in the window
     return 0;
 }
-
 
 /*
 #include <opencv2\highgui\highgui.hpp>
