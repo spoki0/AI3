@@ -31,17 +31,19 @@ int main(){
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
+#include <fstream>
 
 using namespace cv;
 using namespace std;
 
-const int alphabetSize = 3;
+const int alphabetSize = 26;
 const int ImageSize = 30;
 const int trainingSet = 10;
 
-int main( int argc, char** argv )
-{
-	char letters[alphabetSize] = { 'A', 'B', 'C'};
+int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
+{									// Jeg tror vi skal flytte dette til en egen funksjon som prepper, og dette er vel egentlig en engangsjobb for å gjøre klar tallene.
+	//char letters[alphabetSize] = { 'A', 'B', 'C'};
+	char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 	int NumberEachRow[ImageSize];
 	Mat img, ImgRow;
 
@@ -51,15 +53,13 @@ int main( int argc, char** argv )
      return -1;
     }*/
 	
-	for (int i = 0; i <= alphabetSize; i++){
+	for (int i = 0; i < alphabetSize; i++){
 		for (int samples = 1; samples <= trainingSet; samples++){
 			string imgPath;
 			stringstream PathPrep;
-			PathPrep << letters[i] << samples << ".jpg";
+			PathPrep << "Resized_30x30/" << letters[i] << samples << ".jpg";
 			imgPath = PathPrep.str();
-
 			cout << imgPath;
-			cin.get();
 			img = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);	// Read the file
 
 			if (!img.data)										// Check for invalid input
@@ -74,13 +74,22 @@ int main( int argc, char** argv )
 				ImgRow = img.row(i);
 				NumberEachRow[i] = countNonZero(ImgRow);
 			}
-		}
+
+			ofstream dataOut;
+			string dataPath;
+			stringstream dataPathPrep;
+			dataPathPrep << "preprocessDataSet/" << letters[i] << samples;
+			dataPath = dataPathPrep.str();
+			dataOut.open(dataPath);
+
+			for (int i = 0; i < img.rows; i++){
+				dataOut << NumberEachRow[i] << " ";
+			}
+			dataOut << letters[i];
+			dataOut.close();
+			}
 	}
 	
-    namedWindow( "Display window", WINDOW_AUTOSIZE );	// Create a window for display.
-    imshow( "Display window", img );					// Show our image inside it.
-
-	waitKey();                                          // Wait for a keystroke in the window
     return 0;
 }
 
