@@ -51,7 +51,7 @@ int main( int argc, char** argv )
      return -1;
     }*/
 	
-	for (int i = 0; i <= alphabetSize; i++){
+	for (int i = 0; i < alphabetSize; i++){
 		for (int samples = 1; samples <= trainingSet; samples++){
 			string imgPath;
 			stringstream PathPrep;
