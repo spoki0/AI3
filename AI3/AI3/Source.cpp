@@ -42,7 +42,7 @@ const int trainingSet = 10;
 
 int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
 {									// Jeg tror vi skal flytte dette til en egen funksjon som prepper, og dette er vel egentlig en engangsjobb for å gjøre klar tallene.
-	//char letters[alphabetSize] = { 'A', 'B', 'C'};
+	
 	char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 	int NumberEachRow[ImageSize];
 	Mat img, ImgRow;
@@ -59,7 +59,6 @@ int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjø
 			stringstream PathPrep;
 			PathPrep << "Resized_30x30/" << letters[i] << samples << ".jpg";
 			imgPath = PathPrep.str();
-			cout << imgPath;
 			img = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);	// Read the file
 
 			if (!img.data)										// Check for invalid input
@@ -71,8 +70,8 @@ int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjø
 
 			for (int i = 0; i < img.rows; i++)
 			{
-				ImgRow = img.row(i);
-				NumberEachRow[i] = countNonZero(ImgRow);
+				ImgRow = img.row(i);	// Retrieves a row in the image
+				NumberEachRow[i] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
 			}
 
 			ofstream dataOut;
@@ -85,6 +84,7 @@ int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjø
 			for (int i = 0; i < img.rows; i++){
 				dataOut << NumberEachRow[i] << " ";
 			}
+
 			dataOut << letters[i];
 			dataOut.close();
 			}
