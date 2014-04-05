@@ -68,10 +68,11 @@ int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjø
 				return -1;
 			}
 
-			for (int i = 0; i < img.rows; i++)
+			for (int x = 0; x < img.rows; x++)
 			{
 				ImgRow = img.row(i);	// Retrieves a row in the image
 				NumberEachRow[i] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
+
 			}
 
 			ofstream dataOut;
@@ -81,8 +82,8 @@ int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjø
 			dataPath = dataPathPrep.str();
 			dataOut.open(dataPath);
 
-			for (int i = 0; i < img.rows; i++){
-				dataOut << NumberEachRow[i] << " ";
+			for (int x = 0; x < img.rows; x++){
+				dataOut << NumberEachRow[x] << " ";
 			}
 
 			dataOut << letters[i];

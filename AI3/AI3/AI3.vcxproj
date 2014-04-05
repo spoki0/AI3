@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -41,11 +41,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>\..\opencv\build\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\openCV2.4.8\opencv\build\x86\vc12\lib;\..\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>C:\openCV2.4.8\opencv\build\x86\vc12\bin;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>C:\openCV2.4.8\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>\..\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>\..\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\openCV2.4.8\opencv\build\x86\vc12\lib;\..\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>C:\openCV2.4.8\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
