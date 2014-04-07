@@ -40,9 +40,11 @@ const int alphabetSize = 26;
 const int ImageSize = 30;
 const int trainingSet = 10;
 
-int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
-{									// Jeg tror vi skal flytte dette til en egen funksjon som prepper, og dette er vel egentlig en engangsjobb for å gjøre klar tallene.
-	//char letters[alphabetSize] = { 'A', 'B', 'C'};
+int main( int argc, char** argv )	
+{									
+	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
+	// Jeg tror vi skal flytte dette til en egen funksjon som prepper, og dette er vel egentlig en engangsjobb for å gjøre klar tallene.
+
 	char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 	int NumberEachRow[ImageSize];
 	Mat img, ImgRow;
@@ -92,36 +94,3 @@ int main( int argc, char** argv )	// Det jeg(Alf) har skrevet her inn i main gjø
 	
     return 0;
 }
-
-/*
-#include <opencv2\highgui\highgui.hpp>
-#include <opencv2\core\core.hpp>
-#include <cv.h>
-
-using namespace cv;
-
-
-int main()
-{
-    Mat rgbImage, grayImage, resizedImage, bwImage, result;
-
-    rgbImage = imread("A1.jpg");
-    cvtColor(rgbImage, grayImage, CV_RGB2GRAY);
-
-    resize(grayImage, resizedImage, Size(grayImage.cols/3,grayImage.rows/4),
-           0, 0, INTER_LINEAR);
-
-    imwrite("A21.jpg", resizedImage);
-    bwImage = imread("A21.jpg");
-    threshold(bwImage, bwImage, 120, 255, CV_THRESH_BINARY);
-    imwrite("A22.jpg", bwImage);
-    imshow("Original", rgbImage);
-    imshow("Resized", resizedImage);
-    imshow("Resized Binary", bwImage);
-
-    waitKey();
-    return 0;
-}
-
-
-*/
