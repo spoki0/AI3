@@ -40,6 +40,7 @@ const int alphabetSize = 26;
 const int ImageSize = 30;
 const int trainingSet = 10;
 
+
 int main( int argc, char** argv )	
 {									
 	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
@@ -61,7 +62,6 @@ int main( int argc, char** argv )
 			stringstream PathPrep;
 			PathPrep << "Resized_30x30/" << letters[i] << samples << ".jpg";
 			imgPath = PathPrep.str();
-			cout << imgPath;
 			img = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);	// Read the file
 
 			if (!img.data)										// Check for invalid input
@@ -73,8 +73,9 @@ int main( int argc, char** argv )
 
 			for (int x = 0; x < img.rows; x++)
 			{
-				ImgRow = img.row(x);
-				NumberEachRow[x] = countNonZero(ImgRow);
+				ImgRow = img.row(i);	// Retrieves a row in the image
+				NumberEachRow[i] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
+
 			}
 
 			ofstream dataOut;
@@ -87,6 +88,7 @@ int main( int argc, char** argv )
 			for (int x = 0; x < img.rows; x++){
 				dataOut << NumberEachRow[x] << " ";
 			}
+
 			dataOut << letters[i];
 			dataOut.close();
 			}
