@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include "Include.h"
 
@@ -35,3 +36,4 @@ private:
 };
 
 
+*/
