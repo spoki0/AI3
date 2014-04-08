@@ -5,8 +5,15 @@ using namespace std;
 
 const int alphabetSize = 26;
 const int ImageSize = 30;
-const int trainingSet = 10;
 const int dataSet = 10;
+const int trainingSet = 20;
+const int trainingSamples = 260;
+const int attributes = 30;
+const int testSamples = 260;
+const int sizeOfHiddenLayer = 16;
+const int numberOfLayers = 3;
+const int alpha = 0.6;
+const int beta = 1;
 
 char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 int NumberEachRow[ImageSize];
@@ -52,18 +59,24 @@ int preprocess(){
 			dataPath = dataPathPrep.str();	
 			dataOut.open(dataPath);	// Creates file.
 
-			for (int x = 0; x < img.rows; x++){		// Outputs the values after done with the image.
-				dataOut << NumberEachRow[x] << " ";
-			}
+			if (!dataOut.is_open()){ 
+				cout << "Cannot create file?" << endl; 
+				cin.get(); 
+				return 0;
+			} else {
+				for (int x = 0; x < img.rows; x++){		// Outputs the values after done with the image.
+					dataOut << NumberEachRow[x] << " ";
+				}
 
-			dataOut << letters[i];	// Outputs the letter
+				dataOut << letters[i];	// Outputs the letter
+			}
 			dataOut.close();
 		}
 	}
 	return 1;
 }
 
-void readPreprocessed(){
+int readPreprocessed(){
 
 	int counter = 0;
 
@@ -78,7 +91,7 @@ void readPreprocessed(){
 			filepath = temp.str();
 
 			ifstream inputfile(filepath);
-			if (!inputfile.is_open()){ cout << "cannot open file?" << endl; }
+			if (!inputfile.is_open()){ cout << "cannot open file?" << endl; return 0;}
 			else {
 
 				//Reading the data into the matrix.
@@ -101,67 +114,48 @@ void readPreprocessed(){
 			}	
 		}
 	}
+	return 1;
 }
 
-
 int main( int argc, char** argv ) {
-	const int TRAINING_SAMPLES = 260;
-	const int ATTRIBUTES = 30;
-	const int CLASSES = 26;
-	const int TEST_SAMPLES = 260;
-
-	//matrix to hold the training sample
-    Mat training_set(TRAINING_SAMPLES,ATTRIBUTES,CV_32F);
-    //matrix to hold the labels of each taining sample
-    Mat training_set_classifications(TRAINING_SAMPLES, CLASSES, CV_32F);
-    //matric to hold the test samples
-    Mat test_set(TEST_SAMPLES,ATTRIBUTES,CV_32F);
-    //matrix to hold the test labels.
-    Mat test_set_classifications(TEST_SAMPLES,CLASSES,CV_32F);
- 
-    Mat classificationResult(1, CLASSES, CV_32F);
-
-	cv::Mat layers(3,1,CV_32S);
-    layers.at<int>(0,0) = ATTRIBUTES;//input layer
-    layers.at<int>(1,0)=16;//hidden layer
-    layers.at<int>(2,0) =CLASSES;//output layer
-
-	 //create the neural network.
-     //for more details check http://docs.opencv.org/modules/ml/doc/neural_networks.html
-     CvANN_MLP nnetwork(layers, CvANN_MLP::SIGMOID_SYM,0.6,1);
- 
-     CvANN_MLP_TrainParams params(                                  
- 
-		// terminate the training after either 1000
-        // iterations or a very small change in the
-        // network wieghts below the specified value
-        cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000001),
-        // use backpropogation for training
-        CvANN_MLP_TrainParams::BACKPROP,
-        // co-efficents for backpropogation training
-        // recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
-        0.1,
-        0.1
-		);
-
-    //load the training and test data sets.
-
-
-
 
 	if (preprocess() == 0){
 		cout << "Something went wrong when preprocessing the files" << endl;
-		return -1;
+		cin.get(); return -1;
+	}
+	
+	if (readPreprocessed() == 0){
+		cout << "Something went wrong when opening preprocessed files" << endl;
+		cin.get(); return -1;
 	}
 
+    Mat training_set(trainingSamples,attributes,CV_32F);					//matrix to hold the training sample.
+    Mat training_set_classifications(trainingSamples, alphabetSize, CV_32F);//matrix to hold the labels of each training sample.
+    Mat test_set(testSamples,attributes,CV_32F);							//matrix to hold the test samples.
+    Mat test_set_classifications(testSamples,alphabetSize,CV_32F);			//matrix to hold the test labels.
+ 
+    Mat classificationResult(1, alphabetSize, CV_32F);
 
-    /*if( argc != 2)
-    {
-     cout <<" Usage: display_image ImageToLoadAndDisplay" << endl;
-     return -1;
-    }*/
-	
-	readPreprocessed();
+	Mat layers(numberOfLayers,1,CV_32S);
+    layers.at<int>(0,0) = attributes;			//input layer
+    layers.at<int>(1,0) = sizeOfHiddenLayer;	//hidden layer
+    layers.at<int>(2,0) = alphabetSize;			//output layer
+
+	//create the neural network.
+    CvANN_MLP nnetwork(layers, CvANN_MLP::SIGMOID_SYM,alpha,beta);
+ 
+    CvANN_MLP_TrainParams params(                                   
+	// terminate the training after either 1000
+	// iterations or a very small change in the
+	// network wieghts below the specified value
+	cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000001),
+	// use backpropogation for training
+	CvANN_MLP_TrainParams::BACKPROP,
+	// co-efficents for backpropogation training
+	// recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
+	0.1,
+	0.1
+	);
 
     return 0;
 }
