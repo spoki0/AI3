@@ -40,8 +40,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>\..\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\openCV2.4.8\opencv\build\x86\vc12\lib;\..\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>C:\openCV2.4.8\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\bin;$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>C:\openCV2.4.8\opencv\build\x86\vc10\lib;\..\opencv\build\x86\vc12\bin;\..\opencv\build\x86\vc12\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>C:\openCV2.4.8\opencv\build\x86\vc10\bin;\..\opencv\build\x86\vc12\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>\..\opencv\build\include;$(IncludePath)</IncludePath>
@@ -58,7 +58,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\..\opencv\build\x86\vc10\lib;C:\openCV2.4.8\opencv\build\x86\vc12\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\opencv\build\x86\vc10\lib;C:\openCV2.4.8\opencv\build\x86\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_stitching248d.lib;opencv_contrib248d.lib;opencv_videostab248d.lib;opencv_superres248d.lib;opencv_nonfree248d.lib;opencv_gpu248d.lib;opencv_ocl248d.lib;opencv_legacy248d.lib;opencv_ts248d.lib;opencv_calib3d248d.lib;opencv_features2d248d.lib;opencv_objdetect248d.lib;opencv_highgui248d.lib;opencv_video248d.lib;opencv_photo248d.lib;opencv_imgproc248d.lib;opencv_flann248d.lib;opencv_ml248d.lib;opencv_core248d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
