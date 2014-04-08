@@ -38,8 +38,7 @@ using namespace std;
 
 const int alphabetSize = 26;
 const int ImageSize = 30;
-const int trainingSet = 10;
-
+const int trainingSet = 20;
 
 int main( int argc, char** argv )	
 {									
@@ -55,6 +54,10 @@ int main( int argc, char** argv )
      cout <<" Usage: display_image ImageToLoadAndDisplay" << endl;
      return -1;
     }*/
+
+	for (int i = 0; i < ImageSize; i++)  {
+		NumberEachRow[i] = 0;
+	}
 	
 	for (int i = 0; i < alphabetSize; i++){
 		for (int samples = 1; samples <= trainingSet; samples++){
@@ -66,16 +69,15 @@ int main( int argc, char** argv )
 
 			if (!img.data)										// Check for invalid input
 			{
-				cout << "Could not open or find the image" << std::endl;
+				cout << "Could not open or find the image" << endl;
 				cin.get();
 				return -1;
 			}
 
 			for (int x = 0; x < img.rows; x++)
 			{
-				ImgRow = img.row(i);	// Retrieves a row in the image
-				NumberEachRow[i] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
-
+				ImgRow = img.row(x);	// Retrieves a row in the image
+				NumberEachRow[x] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
 			}
 
 			ofstream dataOut;
@@ -93,6 +95,5 @@ int main( int argc, char** argv )
 			dataOut.close();
 			}
 	}
-	
     return 0;
 }
