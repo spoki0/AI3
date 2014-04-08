@@ -78,7 +78,7 @@ int preprocess(){
 
 
 
-void readPreprocessed(){
+int readPreprocessed(){
 
 	int counter = 0;
 
@@ -93,7 +93,7 @@ void readPreprocessed(){
 			filepath = temp.str();
 
 			ifstream inputfile(filepath);
-			if (!inputfile.is_open()){ cout << "cannot open file?" << endl; }
+			if (!inputfile.is_open()){ cout << "cannot open file?" << endl; return 0;}
 			else {
 
 				//Reading the data into the matrix.
@@ -118,7 +118,7 @@ void readPreprocessed(){
 			}	
 		}
 	}
-
+	return 1;
 }
 
 
@@ -137,6 +137,20 @@ void readPreprocessed(){
 
 
 int main( int argc, char** argv ) {
+
+	if (preprocess() == 0){
+		cout << "Something went wrong when preprocessing the files" << endl;
+		cin.get(); return -1;
+	}
+	
+	if (readPreprocessed() == 0){
+		cout << "Something went wrong when opening preprocessed files" << endl;
+		cin.get(); return -1;
+	}
+
+
+
+
 	const int TRAINING_SAMPLES = 3050;
 	const int ATTRIBUTES = 256;
 	const int CLASSES = 26;
@@ -176,23 +190,6 @@ int main( int argc, char** argv ) {
         0.1
 		);
 
-    //load the training and test data sets.
-	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
-	// Jeg tror vi skal flytte dette til en egen funksjon som prepper, og dette er vel egentlig en engangsjobb for å gjøre klar tallene.
-
-	if (preprocess() == 0){
-		cout << "Something went wrong when preprocessing the files" << endl;
-		return -1;
-	}
-
-
-    /*if( argc != 2)
-    {
-     cout <<" Usage: display_image ImageToLoadAndDisplay" << endl;
-     return -1;
-    }*/
-	
-	readPreprocessed();
 
 
 	
