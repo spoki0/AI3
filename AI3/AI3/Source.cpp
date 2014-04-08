@@ -129,9 +129,6 @@ int main( int argc, char** argv ) {
 		cin.get(); return -1;
 	}
 
-
-
-
 	const int TRAINING_SAMPLES = 3050;
 	const int ATTRIBUTES = 256;
 	const int CLASSES = 26;
