@@ -6,6 +6,7 @@ using namespace std;
 const int alphabetSize = 26;
 const int ImageSize = 30;
 const int trainingSet = 10;
+const int dataSet = 10;
 
 char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 int NumberEachRow[ImageSize];
@@ -16,20 +17,19 @@ const int reps = (alphabetSize*trainingSet);
 Mat trainData(reps, ImageSize, CV_32F);
 Mat trainResults(reps, alphabetSize, CV_32F);
 
-
 int preprocess(){
 
-	for (int i = 0; i < ImageSize; i++)  {
+	for (int i = 0; i < ImageSize; i++)  {	// Resets number array.
 		NumberEachRow[i] = 0;
 	}
 	
-	for (int i = 0; i < alphabetSize; i++){
-		for (int samples = 1; samples <= trainingSet; samples++){
+	for (int i = 0; i < alphabetSize; i++){		// Loops for each letter.
+		for (int samples = 1; samples <= trainingSet; samples++){	// Loopes through
 			
 			string imgPath;
 			stringstream PathPrep;
-			PathPrep << "Resized_30x30/" << letters[i] << samples << ".jpg";
-			imgPath = PathPrep.str();
+			PathPrep << "Resized_30x30/" << letters[i] << samples << ".jpg";	// Set up the string properly.
+			imgPath = PathPrep.str(); // Read file.
 			img = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);	// Read the file
 
 			if (!img.data)										// Check for invalid input
@@ -41,22 +41,22 @@ int preprocess(){
 
 			for (int x = 0; x < img.rows; x++)
 			{
-				ImgRow = img.row(x);	// Retrieves a row in the image
-				NumberEachRow[x] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
+				ImgRow = img.row(x);	// Retrieves a row in the image.
+				NumberEachRow[x] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result.
 			}
 
 			ofstream dataOut;
-			string dataPath;
+			string dataPath;	
 			stringstream dataPathPrep;
-			dataPathPrep << "preprocessDataSet/" << letters[i] << samples;
-			dataPath = dataPathPrep.str();
-			dataOut.open(dataPath);
+			dataPathPrep << "preprocessDataSet/" << letters[i] << samples;	// Set up the string properly.
+			dataPath = dataPathPrep.str();	
+			dataOut.open(dataPath);	// Creates file.
 
-			for (int x = 0; x < img.rows; x++){
+			for (int x = 0; x < img.rows; x++){		// Outputs the values after done with the image.
 				dataOut << NumberEachRow[x] << " ";
 			}
 
-			dataOut << letters[i];
+			dataOut << letters[i];	// Outputs the letter
 			dataOut.close();
 		}
 	}
@@ -105,10 +105,10 @@ void readPreprocessed(){
 
 
 int main( int argc, char** argv ) {
-	const int TRAINING_SAMPLES = 3050;
-	const int ATTRIBUTES = 256;
+	const int TRAINING_SAMPLES = 260;
+	const int ATTRIBUTES = 30;
 	const int CLASSES = 26;
-	const int TEST_SAMPLES = 1170;
+	const int TEST_SAMPLES = 260;
 
 	//matrix to hold the training sample
     Mat training_set(TRAINING_SAMPLES,ATTRIBUTES,CV_32F);
