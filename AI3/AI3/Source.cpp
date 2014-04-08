@@ -1,5 +1,3 @@
-
-
 #include "Include.h"
 
 using namespace cv;
@@ -8,7 +6,6 @@ using namespace std;
 const int alphabetSize = 26;
 const int ImageSize = 30;
 const int trainingSet = 10;
-
 
 char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 int NumberEachRow[ImageSize];
@@ -25,9 +22,12 @@ Mat trainResults(reps, alphabetSize, CV_32F);
 
 
 
-
 int preprocess(){
 
+	for (int i = 0; i < ImageSize; i++)  {
+		NumberEachRow[i] = 0;
+	}
+	
 	for (int i = 0; i < alphabetSize; i++){
 		for (int samples = 1; samples <= trainingSet; samples++){
 			
@@ -39,16 +39,15 @@ int preprocess(){
 
 			if (!img.data)										// Check for invalid input
 			{
-				cout << "Could not open or find the image" << std::endl;
+				cout << "Could not open or find the image" << endl;
 				cin.get();
 				return 0;
 			}
 
 			for (int x = 0; x < img.rows; x++)
 			{
-				ImgRow = img.row(i);	// Retrieves a row in the image
-				NumberEachRow[i] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
-
+				ImgRow = img.row(x);	// Retrieves a row in the image
+				NumberEachRow[x] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
 			}
 
 			ofstream dataOut;
@@ -68,8 +67,6 @@ int preprocess(){
 	}
 	return 1;
 }
-
-
 
 
 
@@ -101,8 +98,6 @@ int readPreprocessed(){
 				for (int x = 0; x < ImageSize; x++){
 					inputfile >> trainData.at<int>(counter, x);
 				}
-
-			
 			
 				//This one is more fun. read the resulting character
 				//convert it to an int value, and set the corresponding node
@@ -120,20 +115,6 @@ int readPreprocessed(){
 	}
 	return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 int main( int argc, char** argv ) {
@@ -190,8 +171,5 @@ int main( int argc, char** argv ) {
         0.1
 		);
 
-
-
-	
     return 0;
 }
