@@ -5,7 +5,7 @@ using namespace std;
 
 const int alphabetSize = 26;
 const int ImageSize = 30;
-const int trainingSet = 10;
+const int trainingSet = 20;
 
 char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
 int NumberEachRow[ImageSize];
@@ -128,9 +128,6 @@ int main( int argc, char** argv ) {
 		cout << "Something went wrong when opening preprocessed files" << endl;
 		cin.get(); return -1;
 	}
-
-
-
 
 	const int TRAINING_SAMPLES = 3050;
 	const int ATTRIBUTES = 256;
