@@ -1,3 +1,4 @@
+/*
 #include "Include.h"
 //#include "Net.h"
 
@@ -111,3 +112,4 @@ Net::Net(const vector<unsigned> &topology){
 
 Net::~Net(void) {
 }
+*/

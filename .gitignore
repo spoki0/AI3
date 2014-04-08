@@ -11,7 +11,9 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
-#build/
+build/
+opencv/
+preprocessDataSet/
 [Bb]in/
 [Oo]bj/
 
