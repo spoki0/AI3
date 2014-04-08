@@ -136,8 +136,47 @@ void readPreprocessed(){
 
 
 
-int main( int argc, char** argv )	
-{									
+int main( int argc, char** argv ) {
+	const int TRAINING_SAMPLES = 3050;
+	const int ATTRIBUTES = 256;
+	const int CLASSES = 26;
+	const int TEST_SAMPLES = 1170;
+
+	//matrix to hold the training sample
+    Mat training_set(TRAINING_SAMPLES,ATTRIBUTES,CV_32F);
+    //matrix to hold the labels of each taining sample
+    Mat training_set_classifications(TRAINING_SAMPLES, CLASSES, CV_32F);
+    //matric to hold the test samples
+    Mat test_set(TEST_SAMPLES,ATTRIBUTES,CV_32F);
+    //matrix to hold the test labels.
+    Mat test_set_classifications(TEST_SAMPLES,CLASSES,CV_32F);
+ 
+    Mat classificationResult(1, CLASSES, CV_32F);
+
+	cv::Mat layers(3,1,CV_32S);
+    layers.at<int>(0,0) = ATTRIBUTES;//input layer
+    layers.at<int>(1,0)=16;//hidden layer
+    layers.at<int>(2,0) =CLASSES;//output layer
+
+	 //create the neural network.
+     //for more details check http://docs.opencv.org/modules/ml/doc/neural_networks.html
+     CvANN_MLP nnetwork(layers, CvANN_MLP::SIGMOID_SYM,0.6,1);
+ 
+     CvANN_MLP_TrainParams params(                                  
+ 
+		// terminate the training after either 1000
+        // iterations or a very small change in the
+        // network wieghts below the specified value
+        cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000001),
+        // use backpropogation for training
+        CvANN_MLP_TrainParams::BACKPROP,
+        // co-efficents for backpropogation training
+        // recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
+        0.1,
+        0.1
+		);
+
+    //load the training and test data sets.
 	// Det jeg(Alf) har skrevet her inn i main gjør om bildene til tallverdier som vi kan mate inn i ANN for å kjenne igjen bokstavene.
 	// Jeg tror vi skal flytte dette til en egen funksjon som prepper, og dette er vel egentlig en engangsjobb for å gjøre klar tallene.
 
