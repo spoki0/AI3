@@ -69,7 +69,7 @@ int main( int argc, char** argv ) {
     printf( "Training iterations: %i\n\n", iterations);
  
     // Save the model generated into an xml file.
-    CvFileStorage* storage = cvOpenFileStorage( "C:\\Users\\NITHIN\\Desktop\\OCR\\NN\\OCR1\\param.xml", 0, CV_STORAGE_WRITE );
+    CvFileStorage* storage = cvOpenFileStorage( "param.xml", 0, CV_STORAGE_WRITE );
     nnetwork.write(storage,"DigitOCR");
     cvReleaseFileStorage(&storage);
  
