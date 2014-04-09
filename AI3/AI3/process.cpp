@@ -83,13 +83,11 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 			else {
 
 
-				cout << "here?" << counter << endl;
 				//Reading the data into the matrix.
 				//One line represent one training event, and the values respond thusly.
 				for (int x = 0; x < ImageSize; x++){
 					inputfile >> trainData.at<int>(counter, x);
 				}
-				cout << "here?" << counter << endl;
 
 				//This one is more fun. read the resulting character
 				//convert it to an int value, and set the corresponding node

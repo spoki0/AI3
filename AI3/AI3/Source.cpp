@@ -27,13 +27,6 @@ const double alpha = 0.6;
 
 
 
-//Mat img, ImgRow;
-
-// Number of training repetitions, the training data matrix and the training results matrix
-const int reps = (alphabetSize*trainingSet);
-Mat trainData(reps, ImageSize, CV_32F);
-Mat trainResults(reps, alphabetSize, CV_32F);
-
 
 
 
@@ -51,7 +44,7 @@ int main( int argc, char** argv ) {
     Mat test_set(testSamples,attributes,CV_32F);							//matrix to hold the test samples.
     Mat test_results(testSamples,alphabetSize,CV_32F);						//matrix to hold the test labels.
  
-	if (readPreprocessed(trainData, trainResults, ImageSize, alphabetSize, trainingSet, letters) == 0){
+	if (readPreprocessed(training_set, training_results, ImageSize, alphabetSize, trainingSet, letters) == 0){
 		cout << "Something went wrong when opening preprocessed files" << endl;
 		cin.get(); return -1;
 	}
@@ -101,10 +94,10 @@ int main( int argc, char** argv ) {
     int wrong_class = 0;
  
     //classification matrix gives the count of classes to which the samples were classified.
-    int classification_matrix[CLASSES][CLASSES]={{}};
+    int classification_matrix[alphabetSize][alphabetSize]={{}};
  
     // for each sample in the test set.
-    for (int tsample = 0; tsample < TEST_SAMPLES; tsample++) {
+    for (int tsample = 0; tsample < testSamples; tsample++) {
  
         // extract the sample
  
@@ -120,7 +113,7 @@ int main( int argc, char** argv ) {
         int maxIndex = 0;
         float value=0.0f;
         float maxValue=classificationResult.at<float>(0,0);
-        for(int index=1;index<CLASSES;index++) {
+        for(int index=1;index<alphabetSize;index++) {
 			value = classificationResult.at<float>(0,index);
 
             if(value>maxValue) {
@@ -141,7 +134,7 @@ int main( int argc, char** argv ) {
             wrong_class++;
  
             //find the actual label 'class_index'
-            for(int class_index=0;class_index<CLASSES;class_index++) {
+            for(int class_index=0;class_index<alphabetSize;class_index++) {
 
                 if(test_results.at<float>(tsample, class_index)==1.0f) {
  
@@ -162,20 +155,20 @@ int main( int argc, char** argv ) {
     printf( "\nResults on the testing dataset\n"
     "\tCorrect classification: %d (%g%%)\n"
     "\tWrong classifications: %d (%g%%)\n", 
-    correct_class, (double) correct_class*100/TEST_SAMPLES,
-    wrong_class, (double) wrong_class*100/TEST_SAMPLES);
+    correct_class, (double) correct_class*100/testSamples,
+    wrong_class, (double) wrong_class*100/testSamples);
     cout<<"   ";
 
-    for (int i = 0; i < CLASSES; i++) {
+    for (int i = 0; i < alphabetSize; i++) {
 
         cout<< i<<"\t";
     }
     cout<<"\n";
 
-    for(int row=0;row<CLASSES;row++) {
+    for(int row=0;row<alphabetSize;row++) {
 		
 		cout<<row<<"  ";
-        for(int col=0;col<CLASSES;col++) {
+        for(int col=0;col<alphabetSize;col++) {
 
             cout<<classification_matrix[row][col]<<"\t";
         }
