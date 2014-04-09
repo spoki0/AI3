@@ -63,12 +63,12 @@ int preprocess(const int ImageSize, const int alphabetSize, const int trainingSe
 
 
 
-int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageSize, const int alphabetSize, const int trainingSet, char letters[26]){
+int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageSize, const int alphabetSize, char letters[26], const int start, const int stop){
 
 	int counter = 0;
 
 	// All the files
-	for(int j = 1; j <= trainingSet; j++){
+	for(int j = start; j <= stop; j++){
 		for(int i = 0; i < alphabetSize; i++){
 			
 			//get a proper filepath.
@@ -102,6 +102,8 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 				counter++;
 			}	
 		}
+		std::cout << ".";
 	}
+	std::cout << endl;
 	return 1;
 }
