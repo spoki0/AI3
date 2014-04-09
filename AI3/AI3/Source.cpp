@@ -4,25 +4,31 @@
 using namespace cv;
 using namespace std;
 
-const int alphabetSize = 26;	// The size of the alfabet
-const int ImageSize = 30;		// The size of the image (30x30)
-const int dataSet = 10;			//  
-const int trainingSet = 20;		// 20 because it is 20 of each letter in total
-const int trainingSamples = 260;	// 
-const int attributes = 30;			// 
-const int testSamples = 260;		// Number of letters to be "learned" 10 of each letter
-const int sizeOfHiddenLayer = 16;	// Nomber of hidden layers
-const int numberOfLayers = 3;		// The number of layers
-const int beta = 1;
+
+// Static data related to input data
+const int alphabetSize = 26;
+char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
+const int ImageSize = 30;
+
+
+// Data for training
+const int dataSet = 20;			// Total of data.
+const int trainingSet = 10;		// Amount used for testing.
+const int trainingSamples = alphabetSize*trainingSet;			// Number for training.
+const int testSamples = (alphabetSize*dataSet)-trainingSamples;	// Number for testing.
+
+
+// Related to the Neural net creation
+const int attributes = ImageSize;	// Input til neural net
+const int numberOfLayers = 3;		// Number of layers
+const int sizeOfHiddenLayer = 16;	// Number of nodes on a given hidden layer
+const int beta = 1;					// Sigmoid varaiables
 const double alpha = 0.6;
 
-char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
-Mat img, ImgRow;
 
-// Number of training repetitions, the training data matrix and the training results matrix
-const int reps = (alphabetSize*trainingSet);
-Mat trainData(reps, ImageSize, CV_32F);
-Mat trainResults(reps, alphabetSize, CV_32F);
+
+
+
 
 int main( int argc, char** argv ) {
 
@@ -31,16 +37,19 @@ int main( int argc, char** argv ) {
 		cin.get(); return -1;
 	}
 	
-	if (readPreprocessed(trainData, ImageSize, alphabetSize, trainingSet, letters) == 0){
+
+    Mat training_set(trainingSamples, attributes,CV_32F);					//matrix to hold the training sample.
+    Mat training_results(trainingSamples, alphabetSize, CV_32F);			//matrix to hold the labels of each training sample.
+
+    Mat test_set(testSamples,attributes,CV_32F);							//matrix to hold the test samples.
+    Mat test_results(testSamples,alphabetSize,CV_32F);						//matrix to hold the test labels.
+ 
+	if (readPreprocessed(training_set, training_results, ImageSize, alphabetSize, trainingSet, letters) == 0){
 		cout << "Something went wrong when opening preprocessed files" << endl;
 		cin.get(); return -1;
 	}
+	
 
-    Mat training_set(trainingSamples,attributes,CV_32F);					//matrix to hold the training sample.
-    Mat training_set_classifications(trainingSamples, alphabetSize, CV_32F);//matrix to hold the labels of each training sample.
-    Mat test_set(testSamples,attributes,CV_32F);							//matrix to hold the test samples.
-    Mat test_set_classifications(testSamples,alphabetSize,CV_32F);			//matrix to hold the test labels.
- 
     Mat classificationResult(1, alphabetSize, CV_32F);
 
 	Mat layers(numberOfLayers,1,CV_32S);
@@ -51,21 +60,25 @@ int main( int argc, char** argv ) {
 	//create the neural network.
     CvANN_MLP nnetwork(layers, CvANN_MLP::SIGMOID_SYM,alpha,beta);
  
-    CvANN_MLP_TrainParams params(                                   
+
+
 	// terminate the training after either 1000
 	// iterations or a very small change in the
 	// network wieghts below the specified value
-	cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000001),
+
 	// use backpropogation for training
-	CvANN_MLP_TrainParams::BACKPROP,
+
 	// co-efficents for backpropogation training
 	// recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
-	0.1,
-	0.1
-	);
+    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000001), CvANN_MLP_TrainParams::BACKPROP, 0.1, 0.1 );
+
+
+
+
+
 
 	printf( "\nUsing training dataset\n");
-    int iterations = nnetwork.train(training_set, training_set_classifications,cv::Mat(),cv::Mat(),params);
+    int iterations = nnetwork.train(training_set, training_results,cv::Mat(),cv::Mat(),params);
     printf( "Training iterations: %i\n\n", iterations);
  
     // Save the model generated into an xml file.
@@ -81,10 +94,10 @@ int main( int argc, char** argv ) {
     int wrong_class = 0;
  
     //classification matrix gives the count of classes to which the samples were classified.
-    int classification_matrix[CLASSES][CLASSES]={{}};
+    int classification_matrix[alphabetSize][alphabetSize]={{}};
  
     // for each sample in the test set.
-    for (int tsample = 0; tsample < TEST_SAMPLES; tsample++) {
+    for (int tsample = 0; tsample < testSamples; tsample++) {
  
         // extract the sample
  
@@ -100,7 +113,7 @@ int main( int argc, char** argv ) {
         int maxIndex = 0;
         float value=0.0f;
         float maxValue=classificationResult.at<float>(0,0);
-        for(int index=1;index<CLASSES;index++) {
+        for(int index=1;index<alphabetSize;index++) {
 			value = classificationResult.at<float>(0,index);
 
             if(value>maxValue) {
@@ -112,18 +125,18 @@ int main( int argc, char** argv ) {
         printf("Testing Sample %i -> class result (digit %d)\n", tsample, maxIndex);
  
         //Now compare the predicted class to the actural class. if the prediction is correct then\
-        //test_set_classifications[tsample][ maxIndex] should be 1.
+        //test_results[tsample][ maxIndex] should be 1.
         //if the classification is wrong, note that.
-        if (test_set_classifications.at<float>(tsample, maxIndex)!=1.0f) {
+        if (test_results.at<float>(tsample, maxIndex)!=1.0f) {
 
             // if they differ more than floating point error => wrong class
  
             wrong_class++;
  
             //find the actual label 'class_index'
-            for(int class_index=0;class_index<CLASSES;class_index++) {
+            for(int class_index=0;class_index<alphabetSize;class_index++) {
 
-                if(test_set_classifications.at<float>(tsample, class_index)==1.0f) {
+                if(test_results.at<float>(tsample, class_index)==1.0f) {
  
                     classification_matrix[class_index][maxIndex]++;// A class_index sample was wrongly classified as maxindex.
                     break;
@@ -142,20 +155,20 @@ int main( int argc, char** argv ) {
     printf( "\nResults on the testing dataset\n"
     "\tCorrect classification: %d (%g%%)\n"
     "\tWrong classifications: %d (%g%%)\n", 
-    correct_class, (double) correct_class*100/TEST_SAMPLES,
-    wrong_class, (double) wrong_class*100/TEST_SAMPLES);
+    correct_class, (double) correct_class*100/testSamples,
+    wrong_class, (double) wrong_class*100/testSamples);
     cout<<"   ";
 
-    for (int i = 0; i < CLASSES; i++) {
+    for (int i = 0; i < alphabetSize; i++) {
 
         cout<< i<<"\t";
     }
     cout<<"\n";
 
-    for(int row=0;row<CLASSES;row++) {
+    for(int row=0;row<alphabetSize;row++) {
 		
 		cout<<row<<"  ";
-        for(int col=0;col<CLASSES;col++) {
+        for(int col=0;col<alphabetSize;col++) {
 
             cout<<classification_matrix[row][col]<<"\t";
         }

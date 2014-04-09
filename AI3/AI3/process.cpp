@@ -2,6 +2,10 @@
 using namespace std;
 using namespace cv;
 
+
+
+
+
 int preprocess(const int ImageSize, const int alphabetSize, const int trainingSet, char letters[26]){
 
 	Mat img, ImgRow;
@@ -51,37 +55,47 @@ int preprocess(const int ImageSize, const int alphabetSize, const int trainingSe
 	return 1;
 }
 
-int readPreprocessed(cv::Mat &trainData, const int ImageSize, const int alphabetSize, const int trainingSet, char letters[26]){
+
+
+
+
+
+
+
+
+int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageSize, const int alphabetSize, const int trainingSet, char letters[26]){
 
 	int counter = 0;
 
 	// All the files
-	for(int i = 0; i < alphabetSize; i++){
-		for(int j = 1; j <= trainingSet; j++){
+	for(int j = 1; j <= trainingSet; j++){
+		for(int i = 0; i < alphabetSize; i++){
 			
 			//get a proper filepath.
 			string filepath;
 			stringstream temp;
 			temp << "preprocessDataSet/" << letters[i] << j;
 			filepath = temp.str();
-
+	
+			//if you can open file.
 			ifstream inputfile(filepath);
 			if (!inputfile.is_open()){ cout << "cannot open file?" << endl; return 0;}
 			else {
+
 
 				//Reading the data into the matrix.
 				//One line represent one training event, and the values respond thusly.
 				for (int x = 0; x < ImageSize; x++){
 					inputfile >> trainData.at<int>(counter, x);
 				}
-			
+
 				//This one is more fun. read the resulting character
 				//convert it to an int value, and set the corresponding node
 				//in the matrix to 1. example result is A, then pos 0 in the matrix is 1
 				//if the result is G, pos 6 is 1.
 				char number;
 				inputfile >> number;
-				trainData.at<int>(counter, int(number-'A') ) = 1;
+				trainResults.at<int>(counter, int(number-'A') ) = 1;
 
 				// close current file and increase row for both matrixes by 1.
 				inputfile.close();
