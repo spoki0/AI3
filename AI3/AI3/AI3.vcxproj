@@ -93,6 +93,7 @@
     <ClCompile Include="Neuron.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Example.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h" />

@@ -2,19 +2,11 @@
 using namespace std;
 using namespace cv;
 
-
-
-
-
 int preprocess(const int ImageSize, const int alphabetSize, const int trainingSet, char letters[26]){
 
-	Mat img, ImgRow;
-	int NumberEachRow[30];
+	Mat img, imgResize, ImgRow;
+	int pixelArray[256];
 
-	for (int i = 0; i < ImageSize; i++)  {
-		NumberEachRow[i] = 0;
-	}
-	
 	for (int i = 0; i < alphabetSize; i++){
 		for (int samples = 1; samples <= trainingSet; samples++){
 			
@@ -31,12 +23,19 @@ int preprocess(const int ImageSize, const int alphabetSize, const int trainingSe
 				return 0;
 			}
 
-			for (int x = 0; x < img.rows; x++)
-			{
-				ImgRow = img.row(x);	// Retrieves a row in the image
-				NumberEachRow[x] = countNonZero(ImgRow);	// Counts the nonZero values in the row and stores the result in a array.
-			}
+			resize(img, imgResize, Size(16 ,16),0,0, CV_INTER_AREA);
 
+			int a = 0;
+			for(int x=0;x<16;x++)
+			{  
+				for(int y=0;y<16;y++)
+				{
+					pixelArray[a]=(img.at<uchar>(x,y)==255)?1:0;
+					a++;
+ 
+				}
+			}
+ 
 			ofstream dataOut;
 			string dataPath;
 			stringstream dataPathPrep;
@@ -44,8 +43,8 @@ int preprocess(const int ImageSize, const int alphabetSize, const int trainingSe
 			dataPath = dataPathPrep.str();
 			dataOut.open(dataPath);
 
-			for (int x = 0; x < img.rows; x++){
-				dataOut << NumberEachRow[x] << " ";
+			for (int x = 0; x < ImageSize; x++){
+				dataOut << pixelArray[x] << " ";
 			}
 
 			dataOut << letters[i];
@@ -54,13 +53,6 @@ int preprocess(const int ImageSize, const int alphabetSize, const int trainingSe
 	}
 	return 1;
 }
-
-
-
-
-
-
-
 
 
 int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageSize, const int alphabetSize, char letters[26], const int start, const int stop){
@@ -82,13 +74,11 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 			if (!inputfile.is_open()){ cout << "cannot open file?" << endl; return 0;}
 			else {
 
-
 				//Reading the data into the matrix.
-				//One line represent one training event, and the values respond thusly.
 				for (int x = 0; x < ImageSize; x++){
 					inputfile >> trainData.at<int>(counter, x);
 				}
-
+				
 				//This one is more fun. read the resulting character
 				//convert it to an int value, and set the corresponding node
 				//in the matrix to 1. example result is A, then pos 0 in the matrix is 1
