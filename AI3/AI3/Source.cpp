@@ -27,10 +27,15 @@ const double alpha = 0.6;
 
 int main( int argc, char** argv ) {
 
-	std::cout << "Preprocessing images";
-	if (preprocess(ImageSize, alphabetSize, dataSet, letters) == 0){
-		std::cout << "Something went wrong when preprocessing the files" << endl;
-		cin.get(); return -1;
+	//To avoid preprocessing the images all the time
+	std::cout << "Have you preprocessed files already? Y/N ";
+	char temp = toupper( getchar() );
+	if (temp == 'N'){
+		std::cout << "Preprocessing images";
+		if (preprocess(ImageSize, alphabetSize, dataSet, letters) == 0){
+			std::cout << "Something went wrong when preprocessing the files" << endl;
+			cin.get(); return -1;
+		}
 	}
 	
 

@@ -17,6 +17,7 @@
 // STD
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
 
 // OpenCV
 #include <opencv2/opencv.hpp>
