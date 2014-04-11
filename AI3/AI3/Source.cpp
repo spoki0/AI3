@@ -61,7 +61,7 @@ int main( int argc, char** argv ) {
 
 	Mat layers(numberOfLayers,1,CV_32S);
     layers.at<int>(0,0) = attributes;			//input layer
-    layers.at<int>(1,0) = sizeOfHiddenLayer;	//hidden layer
+	layers.at<int>(1,0) = sizeOfHiddenLayer*3;	//hidden layer
     layers.at<int>(2,0) = alphabetSize;			//output layer
 
 	//create the neural network.
@@ -77,7 +77,7 @@ int main( int argc, char** argv ) {
 
 	// co-efficents for backpropogation training
 	// recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
-    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 10000, 0.0001), CvANN_MLP_TrainParams::BACKPROP, 0.01, 0.01 );
+    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.00000000000001), CvANN_MLP_TrainParams::BACKPROP, 0.01, 0.01 );
 
 
 
@@ -104,9 +104,22 @@ int main( int argc, char** argv ) {
 		Mat test_row = test_set.row(x);							// get test row number x
 		Mat result_row = Mat::zeros(1, alphabetSize, CV_32F);	// results row; all zeroed out.
 
-		
 		//Commence testing.
 		nnetwork.predict(test_row, result_row);
+
+		for(int y = 0; y < attributes; y++){
+			std::cout << test_row.at<int>(0, y) << " ";
+		} cout << endl;
+		
+		for(int y = 0; y < alphabetSize; y++){
+			std::cout << result_row.at<float>(0, y) << " ";
+		} cout << endl;
+		
+		for(int y = 0; y < alphabetSize; y++){
+			std::cout << test_results.at<int>(x, y) << " ";
+		} cout << endl;
+		cin.get();
+
 
 		float maxres = 0;
 		float maxtar = 0;
@@ -129,7 +142,7 @@ int main( int argc, char** argv ) {
 			}
 		}
 		
-		std::cout << "prediction: " << char(numres+'A') << " target is: " << char(numtar+'A') << endl;
+		std::cout << "\nprediction: " << char(numres+'A') << " target is: " << char(numtar+'A') << endl;
 		//cin.get();
 
 		if (numres == numtar){ correct++; }

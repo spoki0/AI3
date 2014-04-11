@@ -31,6 +31,13 @@ int preprocess(const int ImageSize, const int alphabetSize, const int trainingSe
 				return 0;
 			}
 
+			//Sharpen the shait
+			cv::Mat tmp;
+			cv::GaussianBlur(img, tmp, cv::Size(5,5), 5);
+			cv::addWeighted(img, 1.5, tmp, -0.5, 0, img);
+
+
+
 			for (int x = 0; x < img.rows; x++)
 			{
 				ImgRow = img.row(x);	// Retrieves a row in the image
