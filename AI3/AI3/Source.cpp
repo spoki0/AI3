@@ -29,7 +29,7 @@ int main( int argc, char** argv ) {
 
 	//To avoid preprocessing the images all the time
 	std::cout << "Have you preprocessed files already? Y/N ";
-	char temp = toupper( getchar() );
+	char temp = toupper( getchar() ); cin.get();
 	if (temp == 'N'){
 		std::cout << "Preprocessing images";
 		if (preprocess(ImageSize, alphabetSize, dataSet, letters) == 0){
@@ -61,7 +61,7 @@ int main( int argc, char** argv ) {
 	cout << "\nSetting up Neural Net" << endl;
 	Mat layers(numberOfLayers,1,CV_32S);
     layers.at<int>(0,0) = attributes;			//input layer
-	layers.at<int>(1,0) = sizeOfHiddenLayer*3;	//hidden layer
+	layers.at<int>(1,0) = sizeOfHiddenLayer;	//hidden layer
     layers.at<int>(2,0) = alphabetSize;			//output layer
 
 	//create the neural network.
@@ -75,13 +75,12 @@ int main( int argc, char** argv ) {
 
 	// co-efficents for backpropogation training
 	// recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
-    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.00000000000001), CvANN_MLP_TrainParams::BACKPROP, 0.01, 0.1 );
-
-
+    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000000001), CvANN_MLP_TrainParams::BACKPROP, 0.01, 0.5 );
 
 	std::cout << "\nTraining Neural Net" << endl;
-    int iterations = nnetwork.train(training_set, training_results,Mat(),Mat(),params);
-    std::cout << "\nCompleted after " << iterations << " iterations trough the training data set." << endl;
+	
+    int iterations = nnetwork.train(training_set, training_results, Mat(), Mat(), params, CvANN_MLP_TrainParams::BACKPROP);
+	std::cout << "\nCompleted after " << iterations << " iterations trough the training data set." << endl;
 
  
     // Save the model generated into an xml file.
@@ -105,7 +104,7 @@ int main( int argc, char** argv ) {
 		//Commence testing.
 		nnetwork.predict(test_row, result_row);
 
-		
+		/*
 		for(int y = 0; y < attributes; y++){
 			std::cout << test_row.at<int>(0, y) << " ";
 		} cout << endl;
@@ -118,6 +117,7 @@ int main( int argc, char** argv ) {
 			std::cout << test_results.at<int>(x, y) << " ";
 		} cout << endl;
 		cin.get();
+		*/
 		
 
 		float maxres = 0;
