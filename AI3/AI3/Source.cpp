@@ -8,8 +8,7 @@ using namespace std;
 // Static data related to input data
 const int alphabetSize = 26;
 char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W' ,'X', 'Y', 'Z' };
-const int ImageSize = 30;
-
+const int ImageSize = 255;
 
 // Data for training
 const int dataSet = 20;			// Total of data.
@@ -26,13 +25,10 @@ const int beta = 1;					// Sigmoid varaiables
 const double alpha = 0.6;
 
 
-
-
-
-
 int main( int argc, char** argv ) {
 
-	if (preprocess(ImageSize, alphabetSize, trainingSet, letters) == 0){
+	std::cout << "Preprocessing images";
+	if (preprocess(ImageSize, alphabetSize, dataSet, letters) == 0){
 		std::cout << "Something went wrong when preprocessing the files" << endl;
 		cin.get(); return -1;
 	}
@@ -43,13 +39,13 @@ int main( int argc, char** argv ) {
 
     Mat test_set = Mat::zeros(testSamples,attributes,CV_32F);							//zeroed matrix to hold the test samples.
     Mat test_results = Mat::zeros(testSamples,alphabetSize,CV_32F);						//zeroed matrix to hold the test results.
-
- 
+	
 	std::cout << "\nReading training data";
 	if (readPreprocessed(training_set, training_results, ImageSize, alphabetSize, letters, (dataSet-dataSet+1), trainingSet) == 0){
 		std::cout << "Something went wrong when opening preprocessed files" << endl;
 		cin.get(); return -1;
 	}
+	
 	std::cout << "\nReading test data";
 	if (readPreprocessed(test_set, test_results, ImageSize, alphabetSize, letters, (dataSet-trainingSet+1), dataSet) == 0){
 		std::cout << "Something went wrong when opening preprocessed files" << endl;
@@ -57,8 +53,7 @@ int main( int argc, char** argv ) {
 	}
 	
 
-    Mat classificationResult(1, alphabetSize, CV_32F);
-
+	cout << "\nSetting up Neural Net" << endl;
 	Mat layers(numberOfLayers,1,CV_32S);
     layers.at<int>(0,0) = attributes;			//input layer
 	layers.at<int>(1,0) = sizeOfHiddenLayer*3;	//hidden layer
@@ -66,8 +61,6 @@ int main( int argc, char** argv ) {
 
 	//create the neural network.
     CvANN_MLP nnetwork(layers, CvANN_MLP::SIGMOID_SYM,alpha,beta);
- 
-
 
 	// terminate the training after either 10 000
 	// iterations or a very small change in the
@@ -77,13 +70,13 @@ int main( int argc, char** argv ) {
 
 	// co-efficents for backpropogation training
 	// recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
-    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.00000000000001), CvANN_MLP_TrainParams::BACKPROP, 0.01, 0.01 );
+    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.00000000000001), CvANN_MLP_TrainParams::BACKPROP, 0.01, 0.1 );
 
 
 
-	printf( "\nUsing training dataset\n");
-    int iterations = nnetwork.train(training_set, training_results,cv::Mat(),cv::Mat(),params);
-    printf( "Training iterations: %i\n", iterations);
+	std::cout << "\nTraining Neural Net" << endl;
+    int iterations = nnetwork.train(training_set, training_results,Mat(),Mat(),params);
+    std::cout << "\nCompleted after " << iterations << " iterations trough the training data set." << endl;
 
  
     // Save the model generated into an xml file.
@@ -92,9 +85,9 @@ int main( int argc, char** argv ) {
     nnetwork.write(storage,"DigitOCR");
     cvReleaseFileStorage(&storage);
 	std::cout << "\t\t ...Done." << endl; cin.get();
- 
- 
-	
+
+
+	std::cout << "Testing the Neural Net against data set." << endl;
 	//Run all the tests :D
 	int correct = 0;
 	int wrong   = 0;
@@ -107,6 +100,7 @@ int main( int argc, char** argv ) {
 		//Commence testing.
 		nnetwork.predict(test_row, result_row);
 
+		
 		for(int y = 0; y < attributes; y++){
 			std::cout << test_row.at<int>(0, y) << " ";
 		} cout << endl;
@@ -119,7 +113,7 @@ int main( int argc, char** argv ) {
 			std::cout << test_results.at<int>(x, y) << " ";
 		} cout << endl;
 		cin.get();
-
+		
 
 		float maxres = 0;
 		float maxtar = 0;
@@ -155,10 +149,9 @@ int main( int argc, char** argv ) {
 
 
 	// Found it to be a tad complicated, so I wrote my own part above. :D
-	// Don't even know what the bottom part does...
+	// Don't even know what the bottom part does..
 
-	//cin.get();
-	//// Test the generated model with the test samples.
+	// Test the generated model with the test samples.
  //   cv::Mat test_sample;
  //   int correct_class = 0;	//count of correct classifications
  //   int wrong_class = 0;	//count of wrong classifications
