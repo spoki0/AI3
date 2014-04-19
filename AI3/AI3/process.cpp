@@ -66,8 +66,11 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 	int counter = 0;
 
 	// All the files
+	
 	for(int j = start; j <= stop; j++){
 		for(int i = 0; i < alphabetSize; i++){
+		
+		
 			
 			//get a proper filepath.
 			string filepath;

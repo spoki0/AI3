@@ -11,6 +11,7 @@ char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 const int ImageSize = 255;
 
 // Data for training
+const int iterations = 10;
 const int dataSet = 20;			// Total of data.
 const int trainingSet = 10;		// Amount used for testing.
 const int trainingSamples = alphabetSize*trainingSet;			// Number for training.
@@ -33,11 +34,12 @@ int main( int argc, char** argv ) {
 	if (temp == 'N'){
 		std::cout << "Preprocessing images";
 		if (preprocess(ImageSize, alphabetSize, dataSet, letters) == 0){
-			std::cout << "Something went wrong when preprocessing the files" << endl;
+			std::cout << "\nSomething went wrong when preprocessing the files" << endl;
 			cin.get(); return -1;
 		}
 	}
 	
+
 
     Mat training_set = Mat::zeros(trainingSamples, attributes,CV_32F);					//zeroed matrix to hold the training samples.
     Mat training_results = Mat::zeros(trainingSamples, alphabetSize, CV_32F);			//zeroed matrix to hold the training results.
@@ -47,23 +49,103 @@ int main( int argc, char** argv ) {
 	
 	std::cout << "\nReading training data";
 	if (readPreprocessed(training_set, training_results, ImageSize, alphabetSize, letters, (dataSet-dataSet+1), trainingSet) == 0){
-		std::cout << "Something went wrong when opening preprocessed files" << endl;
+		std::cout << "\nSomething went wrong when opening preprocessed files" << endl;
 		cin.get(); return -1;
 	}
 	
 	std::cout << "\nReading test data";
 	if (readPreprocessed(test_set, test_results, ImageSize, alphabetSize, letters, (dataSet-trainingSet+1), dataSet) == 0){
-		std::cout << "Something went wrong when opening preprocessed files" << endl;
+		std::cout << "\nSomething went wrong when opening preprocessed files" << endl;
 		cin.get(); return -1;
 	}
 	
 
-	cout << "\nSetting up Neural Net" << endl;
+	cout << "\nSetting up Neural Net";
+	
 	Mat layers(numberOfLayers,1,CV_32S);
     layers.at<int>(0,0) = attributes;			//input layer
 	layers.at<int>(1,0) = sizeOfHiddenLayer;	//hidden layer
     layers.at<int>(2,0) = alphabetSize;			//output layer
+	
 
+	vector<unsigned> topology;
+	std::cout << ".";
+	topology.push_back(attributes);				//Input layer
+	std::cout << ".";
+	topology.push_back(sizeOfHiddenLayer);		//Hidden layer
+	std::cout << ".";
+	topology.push_back(alphabetSize);			//Output layer
+	Net myNet(topology);
+
+	
+	//Iterate trough all the test samples.
+	std::cout << "\nTraining the neural net";
+	for(int z = 0; z < iterations; z++){
+		for(int x = 0; x < testSamples; x++){
+
+			//Convert input values
+			vector<double> inputVals;
+			for(int y = 0; y < attributes; y++){
+				inputVals.push_back( test_set.at<int>(x, y) );
+			}
+
+			//Convert target values
+			vector<double> targetVals;
+			for(int y = 0; y < alphabetSize; y++){
+				targetVals.push_back( test_results.at<int> (x, y) );
+			}
+
+			myNet.feedForward(inputVals);				//Input values to neural net
+			myNet.backProp(targetVals);					//Specify target output and update
+
+		}
+		std::cout << ".";
+	}
+
+
+
+
+
+	std::cout << "\nTesting neural net";
+	for(int x = 0; x < trainingSamples; x++){
+
+		//Convert input values
+		vector<double> inputVals;
+		for(int y = 0; y < attributes; y++){
+			inputVals.push_back( training_set.at<int>(x, y) );
+		}
+
+		//Convert target values
+		vector<double> targetVals;
+		for(int y = 0; y < alphabetSize; y++){
+			targetVals.push_back( training_results.at<int> (x, y) );
+		}
+
+
+		myNet.feedForward(inputVals);				//Input values to neural net
+
+		vector<double> results;
+		myNet.getResults(results);					//Specify target output and update
+
+		float maxres = 0;
+		float maxtar = 0;
+		int numres = 0;
+		int numtar = 0;
+
+		for(int z = 0; z < results.size(); z++){
+			if (maxres <= results[z]){ maxres = results[z]; numres = z; };
+			if (maxtar <= targetVals[z]){ maxtar = targetVals[z]; numtar = z; }
+		}
+
+		std::cout << "\nPrediction: " << char(numres+'A') << " target is: " << char(numtar+'A');
+
+	}
+	cin.get();
+
+
+
+
+	
 	//create the neural network.
     CvANN_MLP nnetwork(layers, CvANN_MLP::SIGMOID_SYM,alpha,beta);
 
@@ -150,7 +232,7 @@ int main( int argc, char** argv ) {
 	}
 	std::cout << "\nOut of " << testSamples << " the Neural net got " << correct << " correct ones and " << wrong << " wrong ones." << endl;
 	
-
+	
 
 
 	// Found it to be a tad complicated, so I wrote my own part above. :D
@@ -246,3 +328,17 @@ int main( int argc, char** argv ) {
 	
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

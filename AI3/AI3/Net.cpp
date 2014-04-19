@@ -1,4 +1,4 @@
-/*
+
 #include "Include.h"
 //#include "Net.h"
 
@@ -99,9 +99,8 @@ Net::Net(const vector<unsigned> &topology){
 
 		for( unsigned neuronNum = 0; neuronNum <= topology[layNum]; ++neuronNum){
 			m_layers.back().push_back( Neuron(numOutputs, neuronNum) );
-			cout << "made a neuron" << endl;
+			
 		}
-		cout << endl;
 
 		//force biased node output
 		m_layers.back().back().setOutputVal(1.0);
@@ -112,4 +111,3 @@ Net::Net(const vector<unsigned> &topology){
 
 Net::~Net(void) {
 }
-*/

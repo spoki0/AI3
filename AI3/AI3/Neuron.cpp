@@ -1,4 +1,4 @@
-/*
+
 #include "Include.h"
 //#include "Neuron.h"
 
@@ -90,4 +90,3 @@ Neuron::Neuron(unsigned numOutputs, unsigned myIndex){
 Neuron::~Neuron(void)
 {
 }
-*/

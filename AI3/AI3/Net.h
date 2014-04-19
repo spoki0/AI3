@@ -1,4 +1,4 @@
-/*
+
 #pragma once
 
 #include "Include.h"
@@ -19,4 +19,4 @@ private:
 	double m_recentAverageSmoothingFactor;
 	std::vector<Layer> m_layers; //_layers[laynum][neuronnum]
 };
-*/
+
