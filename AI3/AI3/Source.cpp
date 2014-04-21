@@ -11,9 +11,8 @@ char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 const int ImageSize = 256;
 
 // Data for training
-const int iterations = 10;
 const int dataSet = 20;			// Total of data.
-const int trainingSet = 10;		// Amount used for testing.
+const int trainingSet = 10;		// Amount used for training.
 const int trainingSamples = alphabetSize*trainingSet;			// Number for training.
 const int testSamples = (alphabetSize*dataSet)-trainingSamples;	// Number for testing.
 
@@ -22,8 +21,8 @@ const int testSamples = (alphabetSize*dataSet)-trainingSamples;	// Number for te
 const int attributes = ImageSize;	// Input til neural net
 const int numberOfLayers = 3;		// Number of layers
 const int sizeOfHiddenLayer = 64;	// Number of nodes on a given hidden layer
-const int beta = 1;					// Sigmoid varaiables
-const double alpha = 0.6;
+const int beta = 1;
+const double alpha = 0.4;			// Sigmoid varaiables
 
 
 int main( int argc, char** argv ) {
@@ -60,18 +59,15 @@ int main( int argc, char** argv ) {
 
 	std::cout << "\nSetting up Neural Net";
 	
-	Mat layers(numberOfLayers,1,CV_32S);
+	Mat layers(numberOfLayers, 1, CV_32S);
     layers.at<int>(0,0) = attributes;			//input layer
 	layers.at<int>(1,0) = sizeOfHiddenLayer;	//hidden layer
     layers.at<int>(2,0) = alphabetSize;			//output layer
 	
 
 /*	vector<unsigned> topology;
-	std::cout << ".";
 	topology.push_back(attributes);				//Input layer
-	std::cout << ".";
 	topology.push_back(sizeOfHiddenLayer);		//Hidden layer
-	std::cout << ".";
 	topology.push_back(alphabetSize);			//Output layer
 	Net myNet(topology);
 
@@ -155,7 +151,7 @@ int main( int argc, char** argv ) {
 
 	// co-efficents for backpropogation training
 	// recommended values taken from http://docs.opencv.org/modules/ml/doc/neural_networks.html#cvann-mlp-trainparams
-    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 1000, 0.000001), CvANN_MLP_TrainParams::BACKPROP, 0.1, 0.1 );
+    CvANN_MLP_TrainParams params( cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 10000, 0.005), CvANN_MLP_TrainParams::BACKPROP, 0.1, 0.5 );
 
 	std::cout << "\nTraining Neural Net" << endl;
 	
@@ -164,7 +160,7 @@ int main( int argc, char** argv ) {
 
  
     // Save the model generated into an xml file.
-	std::cout << "Writing to file..." << endl;
+	std::cout << "\nWriting to file..." << endl;
     CvFileStorage* storage = cvOpenFileStorage( "param.xml", 0, CV_STORAGE_WRITE );
     nnetwork.write(storage,"DigitOCR");
     cvReleaseFileStorage(&storage);

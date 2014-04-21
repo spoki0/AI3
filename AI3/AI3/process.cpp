@@ -66,12 +66,9 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 	int counter = 0;
 
 	// All the files
-	
 	for(int j = start; j <= stop; j++){
 		for(int i = 0; i < alphabetSize; i++){
-		
-		
-			
+
 			//get a proper filepath.
 			string filepath;
 			stringstream temp;
@@ -94,7 +91,7 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 				//if the result is G, pos 6 is 1.
 				char number;
 				inputfile >> number;
-				trainResults.at<float>(counter, float(number-'A')) = 1.0;
+				trainResults.at<float>(counter, float(number-'A')) = 1.0f;
 				// close current file and increase row for both matrixes by 1.
 				inputfile.close();
 				counter++;
