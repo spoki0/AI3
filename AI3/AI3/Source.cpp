@@ -20,9 +20,9 @@ const int testSamples = (alphabetSize*dataSet)/*-trainingSamples*/;	// Number fo
 // Related to the Neural net creation
 const int attributes = ImageSize;	// Input til neural net
 const int numberOfLayers = 3;		// Number of layers
-const int sizeOfHiddenLayer = 20;	// Number of nodes on a given hidden layer
+const int sizeOfHiddenLayer = 15;	// Number of nodes on a given hidden layer
 const int beta = 1;
-const double alpha = 0.09;			// Sigmoid varaiables
+const double alpha = 0.1;			// Sigmoid varaiables
 
 
 int main( int argc, char** argv ) {
