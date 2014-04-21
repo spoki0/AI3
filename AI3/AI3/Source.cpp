@@ -12,17 +12,17 @@ const int ImageSize = 256;
 
 // Data for training
 const int dataSet = 20;			// Total of data.
-const int trainingSet = 10;		// Amount used for training.
+const int trainingSet = 20;		// Amount used for training.
 const int trainingSamples = alphabetSize*trainingSet;			// Number for training.
-const int testSamples = (alphabetSize*dataSet)-trainingSamples;	// Number for testing.
+const int testSamples = (alphabetSize*dataSet)/*-trainingSamples*/;	// Number for testing.
 
 
 // Related to the Neural net creation
 const int attributes = ImageSize;	// Input til neural net
 const int numberOfLayers = 3;		// Number of layers
-const int sizeOfHiddenLayer = 64;	// Number of nodes on a given hidden layer
+const int sizeOfHiddenLayer = 20;	// Number of nodes on a given hidden layer
 const int beta = 1;
-const double alpha = 0.4;			// Sigmoid varaiables
+const double alpha = 0.09;			// Sigmoid varaiables
 
 
 int main( int argc, char** argv ) {
