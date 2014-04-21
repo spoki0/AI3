@@ -21,7 +21,7 @@ const int testSamples = (alphabetSize*dataSet)-trainingSamples;	// Number for te
 // Related to the Neural net creation
 const int attributes = ImageSize;	// Input til neural net
 const int numberOfLayers = 3;		// Number of layers
-const int sizeOfHiddenLayer = 16;	// Number of nodes on a given hidden layer
+const int sizeOfHiddenLayer = 64;	// Number of nodes on a given hidden layer
 const int beta = 1;					// Sigmoid varaiables
 const double alpha = 0.6;
 
