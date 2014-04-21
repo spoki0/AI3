@@ -24,9 +24,9 @@ int preprocess(const int ImageSize, const int alphabetSize, const int dataSet, c
 			}
 
 			//Sharpen image
-			cv::Mat tmp;
-			cv::GaussianBlur(img, tmp, cv::Size(5,5), 5);
-			cv::addWeighted(img, 1.5, tmp, -0.5, 0, img);
+			Mat tmp;
+			GaussianBlur(img, tmp, cv::Size(5,5), 5);
+			addWeighted(img, 1.5, tmp, -0.5, 0, img);
 
 
 			//Resize to 16x16 and read in each pixel as white or not
@@ -85,17 +85,16 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 
 				//Reading the data into the matrix.
 				for (int x = 0; x < ImageSize; x++){
-					inputfile >> trainData.at<int>(counter, x);
+					inputfile >> trainData.at<float>(counter, x);
 				}
 				
 				//This one is more fun. read the resulting character
-				//convert it to an int value, and set the corresponding node
+				//convert it to a float value, and set the corresponding node
 				//in the matrix to 1. example result is A, then pos 0 in the matrix is 1
 				//if the result is G, pos 6 is 1.
 				char number;
 				inputfile >> number;
-				trainResults.at<int>(counter, int(number-'A') ) = 1;
-
+				trainResults.at<float>(counter, float(number-'A')) = 1.0;
 				// close current file and increase row for both matrixes by 1.
 				inputfile.close();
 				counter++;
