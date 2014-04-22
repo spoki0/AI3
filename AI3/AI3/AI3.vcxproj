@@ -89,16 +89,11 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="example.cpp" />
-    <ClCompile Include="Net.cpp" />
-    <ClCompile Include="Neuron.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include.h" />
-    <ClInclude Include="Net.h" />
-    <ClInclude Include="Neuron.h" />
     <ClInclude Include="process.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

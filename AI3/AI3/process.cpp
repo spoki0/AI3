@@ -16,8 +16,7 @@ int preprocess(const int ImageSize, const int alphabetSize, const int dataSet, c
 			imgPath = PathPrep.str();
 			img = imread(imgPath, CV_LOAD_IMAGE_GRAYSCALE);	// Read the file
 
-			if (!img.data)										// Check for invalid input
-			{
+			if (!img.data){								// Check for invalid input
 				cout << "Could not open or find the image" << endl;
 				cin.get();
 				return 0;
@@ -40,6 +39,7 @@ int preprocess(const int ImageSize, const int alphabetSize, const int dataSet, c
 				}
 			}
  
+			//Write to file
 			ofstream dataOut;
 			string dataPath;
 			stringstream dataPathPrep;
@@ -108,8 +108,6 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 
 int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageSize, std::string filepath){
 	
-
-	
 	//if you can open file.
 	ifstream inputfile(filepath);
 	if (!inputfile.is_open()){ cout << "cannot open file?" << endl; return 0;}
@@ -129,8 +127,6 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 		trainResults.at<double>(0, double(number-'A')) = 1.0f;
 		// close current file and increase row for both matrixes by 1.
 		inputfile.close();
-
 	}	
-
 	return 1;
 }

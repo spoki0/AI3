@@ -10,16 +10,16 @@ char letters[alphabetSize] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 const int ImageSize = 256;
 
 // Data for training
-const int dataSet = 20;			// Total of data.
-const int trainingSet = 10;		// Amount used for training.
-const int trainingSamples = alphabetSize*trainingSet;			// Number for training.
-const int testSamples = alphabetSize*dataSet;	// Number for testing.
+const int dataSet = 20;									// Total of data.
+const int trainingSet = 20;								// Amount used for training.
+const int trainingSamples = alphabetSize*trainingSet;	// Number for training.
+const int testSamples = alphabetSize*dataSet;			// Number for testing.
 
 // Related to the Neural net creation
 const int attributes = ImageSize;	// Input til neural net
 const int numberOfLayers = 3;		// Number of layers
 const int sizeOfHiddenLayer = 615;	// Number of nodes on a given hidden layer, 615 
-const int beta = 1;
+const int beta = 1;					//
 const double alpha = 0.1;			// Sigmoid varaiables
 
 int main( int argc, char** argv ) {
@@ -152,18 +152,19 @@ int main( int argc, char** argv ) {
 				classification_matrix[maxIndex][maxIndex]++;
 			}
 		}
- 
+		
+		//Getting the % of correct and wrong characters
 		cout << "Number of correct letters: " << correct_class << " / ";
-		cout << correct_class*100/testSamples << "% \n";
+		cout << correct_class*100.f/testSamples << "% \n";
 		cout << "Number of wrong lettesr: " << wrong_class << " / "; 
-		cout << wrong_class*100/testSamples << "%\n";
+		cout << wrong_class*100.f/testSamples << "%\n";
 		cin.get();
 
+		//Writing a 2d matrix that shows what the ANN guessed
 		for (int i = 0; i < alphabetSize; i++) {
 	        std::cout << "\t" << char(i+'A');
 	    }
 	    std::cout<<"\n\n";
-
 		for(int row = 0; row < alphabetSize; row++) {
 			std::cout << row << "\t";
 			for(int col = 0; col < alphabetSize; col++) {
@@ -171,6 +172,8 @@ int main( int argc, char** argv ) {
 	        }
 	        std::cout<<"\n\n";
 	    }
+
+	//No need to train
 	} else {
 
 		//read the model from the XML file and create the neural network.
@@ -186,7 +189,7 @@ int main( int argc, char** argv ) {
 		//reading a single preprocessedfile for predicting.
 		cout << "\nEnter path to file for testing: ";
 		getline( cin, path );
-		Mat data = Mat::zeros(1, attributes,CV_32F);		//Zeroed matrix for single test
+		Mat data = Mat::zeros(2, attributes,CV_32F);		//Zeroed matrix for single test
 		Mat goal = Mat::zeros(1, alphabetSize, CV_32F);		//Zeroed matrix for result
 		if (readPreprocessed( data, goal, ImageSize, path) == 0){
 			std::cout << "\nSomething went wrong while reading file." << endl;
