@@ -117,7 +117,7 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 
 		//Reading the data into the matrix.
 		for (int x = 0; x < ImageSize; x++){
-			inputfile >> trainData.at<float>(0, x);
+			inputfile >> trainData.at<double>(0, x);
 		}
 				
 		//This one is more fun. read the resulting character
@@ -126,7 +126,7 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 		//if the result is G, pos 6 is 1.
 		char number;
 		inputfile >> number;
-		trainResults.at<float>(0, float(number-'A')) = 1.0f;
+		trainResults.at<double>(0, double(number-'A')) = 1.0f;
 		// close current file and increase row for both matrixes by 1.
 		inputfile.close();
 
