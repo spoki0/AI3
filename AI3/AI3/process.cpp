@@ -107,26 +107,29 @@ int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageS
 
 
 int readPreprocessed(cv::Mat &trainData, cv::Mat &trainResults, const int ImageSize, std::string filepath){
-	
+
 	//if you can open file.
 	ifstream inputfile(filepath);
 	if (!inputfile.is_open()){ cout << "cannot open file?" << endl; return 0;}
 	else {
-
+	
 		//Reading the data into the matrix.
 		for (int x = 0; x < ImageSize; x++){
-			inputfile >> trainData.at<double>(0, x);
+			inputfile >> trainData.at<float>(0, x);
 		}
-				
+					
 		//This one is more fun. read the resulting character
 		//convert it to a float value, and set the corresponding node
 		//in the matrix to 1. example result is A, then pos 0 in the matrix is 1
 		//if the result is G, pos 6 is 1.
 		char number;
 		inputfile >> number;
-		trainResults.at<double>(0, double(number-'A')) = 1.0f;
+		trainResults.at<float>(0, float(number-'A')) = 1.0f;
 		// close current file and increase row for both matrixes by 1.
 		inputfile.close();
+	
 	}	
+	
 	return 1;
+
 }

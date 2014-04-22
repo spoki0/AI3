@@ -189,12 +189,13 @@ int main( int argc, char** argv ) {
 		//reading a single preprocessedfile for predicting.
 		cout << "\nEnter path to file for testing: ";
 		getline( cin, path );
-		Mat data = Mat::zeros(2, attributes,CV_32F);		//Zeroed matrix for single test
+		Mat data = Mat::zeros(1, attributes,CV_32F);		//Zeroed matrix for single test
 		Mat goal = Mat::zeros(1, alphabetSize, CV_32F);		//Zeroed matrix for result
 		if (readPreprocessed( data, goal, ImageSize, path) == 0){
 			std::cout << "\nSomething went wrong while reading file." << endl;
 			cin.get(); return 1;
 		}
+
 		
 		//prediction
 		Mat prediction = Mat::zeros(1, alphabetSize, CV_32F); //Zeroed matrix for prediction
@@ -205,17 +206,19 @@ int main( int argc, char** argv ) {
 		float maxtar = 0;
 		int numres = 0;
 		int numtar = 0;
-		for(int z = 0; z < alphabetSize; z++) {
-			if (maxres <= prediction.at<float>(0, z)) { 
+		for(int z = 0; z < alphabetSize; z++){
+			if (maxres <= prediction.at<float>(0, z)){ 
 				maxres = prediction.at<float>(0, z); 
 				numres = z;
 			};
-			if (maxtar <= goal.at<float>(0, z)) { 
+			if (maxtar <= goal.at<float>(0, z)){ 
 				maxtar = goal.at<float>(0, z); 
 				numtar = z;
 			}
 		}
 		std::cout << "\nPrediction: " << char(numres+'A') << " target is: " << char(numtar+'A');
+
+
 	}
 
 	std::cin.get();
